@@ -32,8 +32,14 @@ function train_lsq{T <: AbstractFloat}(
   # Update RX
   RX = R' * X;
 
+  lr = 1e-3
+  globalStep = 0
+  memory = Array{Float32, 2}(zeros(m*h, d));
+
   # Initialize C
-  C = update_codebooks( RX, B, h, V, "lsqr" )
+  # C = update_C(RX, B, h, C)
+
+  C, lr, globalStep, memory = Momentum_miniBatch(RX, B, h, C, lr, globalStep, memory);
 
   # Apply the rotation to the codebooks
   for i = 1:m
@@ -56,7 +62,8 @@ function train_lsq{T <: AbstractFloat}(
     @printf("%3d %e \n", iter, obj[iter]);
 
     # Update the codebooks
-    C = update_codebooks( X, B, h, V, "lsqr" )
+    # C = update_C(X, B, h, C) 
+    C, lr, globalStep, memory = Momentum_miniBatch(X, B, h, C, lr, globalStep, memory);
 
     # Update the codes with local search
     for i = 1:ilsiter
