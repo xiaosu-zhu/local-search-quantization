@@ -8,7 +8,7 @@ include("../src/linscan/Linscan.jl");
 
 function demo_lsq(
   dataset_name="SIFT1M",
-  nread::Integer=Int(1e4)) # Increase this to 1e5 to use the full dataset
+  nread::Integer=Int(1e5)) # Increase this to 1e5 to use the full dataset
 
   # === Hyperparams ===
   m       = 7 # In LSQ we use m-1 codebooks
@@ -17,17 +17,17 @@ function demo_lsq(
   nquery  = Int(1e4)
   knn     = Int(1e3) # Compute recall up to
   b       = Int( log2(h) * m )
-  niter   = 10
+  niter   = 100
 
   # === OPQ initialization ===
   x_train              = read_dataset(dataset_name, nread )
   d, _                 = size( x_train )
-  C, B, R, train_error = train_opq(x_train, m, h, niter, "natural", verbose)
+  C, B, R, train_error = train_opq(x_train, m, h, 10, "natural", verbose)
   @printf("Error after OPQ is %e\n", train_error[end])
 
   # === ChainQ initialization ===
   B                    = convert( Matrix{Int16}, B )
-  C, B, R, train_error = train_chainq( x_train, m, h, R, B, C, niter )
+  C, B, R, train_error = train_chainq( x_train, m, h, R, B, C, 10 )
   @printf("Error after ChainQ is %e\n", train_error[end])
 
   # === LSQ train ===
