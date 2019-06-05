@@ -71,7 +71,7 @@ function reshape_C(C::Vector{Matrix{Float32}}, m::Integer, h::Integer, d::Intege
         C -= lr * C_;
         global_step += 1
         if global_step % decay_step == 0
-            print("decay learning rate %6f -> %6f", lr, lr*decay_rate)
+            print("decay learning rate %.2e -> %.2e\n", lr, lr*decay_rate)
             lr *= decay_rate
         end
     end
@@ -110,7 +110,7 @@ function reshape_C(C::Vector{Matrix{Float32}}, m::Integer, h::Integer, d::Intege
         C -= lr * memory;
         global_step += 1
         if global_step % decay_step == 0
-            @printf("decay learning rate %.2e -> %.2e", lr, lr*decay_rate)
+            @printf("decay learning rate %.2e -> %.2e\n", lr, lr*decay_rate)
             lr *= decay_rate
         end
     end
