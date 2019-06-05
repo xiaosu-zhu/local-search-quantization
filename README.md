@@ -1,3 +1,5 @@
+This is the modified version of LSQ, changed C update policy from LSQR to mini-batch SGD/momentum.
+
 # Local-search Quantization
 
 This is the code for the papers
